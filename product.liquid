@@ -1,0 +1,944 @@
+{{ 'jquery.magnific.js' | asset_url | script_tag }}
+{{ 'jquery.magnific.css' | asset_url | stylesheet_tag }}	
+
+{{ 'custom.js' | asset_url | script_tag }}
+<style>
+  .header-background-default {
+    display:none;
+  }
+  #product-image {
+    display: block !important;
+  }
+  
+  div#my_anshu {
+  display: block  ;
+  float: none;
+  margin: 0 auto;
+  width: 100%;
+}  
+</style>
+
+
+
+
+
+
+
+{{ 'default-skin.css' | asset_url | stylesheet_tag }}
+
+
+<script>
+    window.paceOptions = {
+        restartOnPushState: false
+    }
+</script>
+
+
+<div class="main-container">
+  <div class="header-background-default">
+    <div class="container">
+      <div class="breadcrumbs">
+        <ul>
+          <li class="home">
+            <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ shop.url }}" title="{{ shop.name | escape }}" itemprop="url"><span itemprop="title">{{ 'general.breadcrumbs.home' | t }}</span></a></span>
+            <span> &gt; </span>
+          </li>
+          {% if collection %}
+          <li>
+            <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ collection.url }}" title="{{ collection.title | escape }}">{{ collection.title }}</a></span>
+            <span> &gt; </span>
+          </li>
+          {% else %}
+          <li>
+            <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/collections/all" title="All Products">{{ 'general.breadcrumbs.products' | t }}</a></span>
+            <span> &gt; </span>
+          </li>
+          {% endif %}
+          <li class="product">
+            <strong>{{ product.title }}</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="novaworks-main-content">
+    <div class="main home-content container">
+      <div class="row columns-layout">
+        <div class="col-main col-md-10 main-product-container">
+          <div class="product-view">
+            <div class="product-essential">
+                <div class="row">
+                  
+                  <div class="col-md-3 col-sm-12 col-xs-12 product-page-left-details desk">
+                    <div class="product-name">
+                       <h1>{{ product.title }}</h1>
+                      
+                       {% if settings.display_product_detail_description %}
+              <div class="description">
+                  <div class="panel-body">
+                    <div class="std">
+                      {{ product.description }}
+                    </div>
+                </div>
+              </div>
+              {% endif %}
+                    </div>
+                  </div>
+                    <div class="col-md-7 col-sm-12 col-xs-12 product-page-images">
+                    <div class="row" id="product-images">
+
+                      <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                 		<div class="center_side_pro" id="my_anshu">
+                            
+                          <div class="bhainskidumha">
+                               <ul class="slides">  
+                                 {% for image in product.images %}
+                                   <li>
+                                    
+                                       <img class="change-img" src="{{ image | product_img_url: 'master' }}" alt="{{ image.alt | remove : " " | upcase}}" />
+                                    
+                                   </li>
+                                 {% endfor %}
+                               </ul>
+                          </div>
+                          <div class="bhainskidumha-mobile">
+                               <ul class="slides">  
+                                 {% for image in product.images %}
+                                   <li>
+                                    
+                                       <img class="change-img" src="{{ image | product_img_url: 'master' }}" alt="{{ image.alt | remove : " " | upcase}}" />
+                                    
+                                   </li>
+                                 {% endfor %}
+                               </ul>
+                          </div>
+                         </div>
+							
+                       
+		
+                      </div>
+                      
+                        
+             
+                      
+                    </div>
+                  </div>
+                       <div class="col-md-3 col-sm-12 col-xs-12 product-page-left-details mobile">
+                    <div class="product-name">
+                       <h1>{{ product.title }}</h1>
+                      
+                     
+                      
+                       {% if settings.display_product_detail_description %}
+              <div class="description desktop-description">
+                  <div class="panel-body">
+                    <div class="std">
+                      {{ product.description }}
+                    </div>
+                </div>
+              </div>
+              {% endif %}
+                    </div>
+                  </div>
+                  {% include 'mobile-bottom' %}
+                  <div class="col-md-3 col-sm-12 col-xs-12 product-page-right-details desktop-product-details">
+                    <div class="product-box-left">
+                      <div class="images">
+                         {% for image in product.images %}                      
+                        {% if image.alt == "flag" %}
+                           <div id="flag-image">
+                               <img class="change-img" src="{{ image | img_url: '1024x1024' }}" alt="{{ image.alt | remove : " " | upcase}}" />
+                           </div>
+                        {%endif%}
+                        {% endfor %}
+                      </div>
+                      <div class="price-box">
+                      
+                        
+                        <p class="special-price">
+                          <span id="price-preview" class="price price-preview">{{ variant.price | money }}</span>
+                        </p>
+                        {% if variant.price < variant.compare_at_price %}
+                        <p class="old-price">
+                          <span class="price-sep">-</span>
+                          <span class="price">{{ variant.compare_at_price | money }}</span>
+                        </p>
+                        {% endif %}
+                        
+                        
+                      </div>
+                      
+                      
+                      
+                      <div class="ratings">
+                        <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+                      </div>
+                      
+                      {% assign variant = product.selected_or_first_available_variant %}
+                      
+<!-- description and shipping tabs -->
+                      {% if settings.display_product_detail_description or settings.display_product_reviews or settings.display_custom_tab or settings.display_size_chart %}
+            
+            {% if settings.product_tab_style == '1' %}
+            <div class="product-collateral hidden-xs">
+              <div id="parentVerticalTab" class="tab-for-layout-0">
+                <ul class="resp-tabs-list hor_1">
+                  {% if settings.display_product_detail_description %}
+                  <li>{{ settings.product_description_title }}</li>
+                  {% endif %}
+                  {% if settings.display_product_reviews %}
+                  <li>Reviews</li>
+                  {% endif %}
+                  {% if settings.display_custom_tab %}
+                  <li>{{ settings.custom_tab_title }}</li>
+                  {% endif %}
+                  {% if settings.display_size_chart %}
+                  <li>{{ settings.custom_size_chart_title }}</li>
+                  {% endif %}
+                </ul>
+                <div class="resp-tabs-container hor_1">
+                  {% if settings.display_product_detail_description %}
+                  <div>
+                    <div class="std">
+                      {{ product.description }}
+                    </div>
+                  </div>
+                  {% endif %}
+                  {% if settings.display_product_reviews %}
+                  <div>
+                    <div class="box-collateral box-reviews" id="customer-reviews">
+                      <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+                    </div>
+                  </div>
+                  {% endif %}
+                  {% if settings.display_custom_tab %}
+                  <div>
+                    <div class="box-collateral">
+                      {{ settings.custom_tab_content }}
+                    </div>
+                  </div>
+                  {% endif %}
+                  {% if settings.display_size_chart %}
+                  <div>
+                    <div class="box-collateral">
+                      <img src="{{ 'custom_size_chart_content.jpg' | asset_url }}" alt="{{ settings.custom_size_chart_title }}" />
+                    </div>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+                   
+            <div class="panel-group visible-xs" id="product-tabs">
+              {% if settings.display_product_detail_description %}
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-tabs" href="#product-tab-1">{{ settings.product_description_title }} <i class="fa fa-angle-right pull-right"></i></a></h4>
+                </div>
+                <div id="product-tab-1" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <div class="std">
+                      {{ product.description }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+              {% if settings.display_product_reviews %}
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-tabs" href="#product-tab-2">{{ settings.product_review_title }} <i class="fa fa-angle-right pull-right"></i></a></h4>
+                </div>
+                <div id="product-tab-2" class="panel-collapse collapse">
+                  <div class="panel-body"  id="customer-reviews-xs"></div>
+                </div>
+              </div>
+              {% endif %}
+              {% if settings.display_custom_tab %}
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-tabs" href="#product-tab-3">{{ settings.custom_tab_title }} <i class="fa fa-angle-right pull-right"></i></a></h4>
+                </div>
+                <div id="product-tab-3" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    {{ settings.custom_tab_content }}
+                  </div>
+                </div>
+              </div>
+           
+              {% endif %}
+              {% if settings.display_size_chart %}
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-tabs" href="#product-tab-4">{{ settings.custom_size_chart_title }} <i class="fa fa-angle-right pull-right"></i></a></h4>
+                </div>
+                <div id="product-tab-4" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <img src="{{ 'custom_size_chart_content.jpg' | asset_url }}" alt="{{ settings.custom_size_chart_title }}" />
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+            {% endif %}
+                      
+                      
+            {% if settings.product_tab_style == '2' %}
+            <div class="panel-group" id="product-tabs">
+              {% if settings.display_product_detail_description %}
+              <div class="panel panel-default">
+                <!--<div class="panel-heading">
+                  <h4 class="panel-title"><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-tabs" href="#product-tab-1">{{ settings.product_description_title }} <i class="fa fa-angle-right pull-right"></i></a></h4>
+                </div>-->
+                <div id="product-tab-1" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <div class="std">
+                      {{ product.description }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+              {% if settings.display_product_reviews %}
+              <div class="panel panel-default">
+                <!--<div class="panel-heading">
+                  <h4 class="panel-title"><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-tabs" href="#product-tab-2">Review <i class="fa fa-angle-right pull-right"></i></a></h4>
+                </div>-->
+                <div id="product-tab-2" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+              {% if settings.display_custom_tab %}
+              <div class="panel panel-default">
+                <!--<div class="panel-heading">
+                  <h4 class="panel-title"><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-tabs" href="#product-tab-3">{{ settings.custom_tab_title }} <i class="fa fa-angle-right pull-right"></i></a></h4>
+                </div>-->
+                <div id="product-tab-3" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    {{ settings.custom_tab_content }}
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+              {% if settings.display_size_chart %}
+              <div class="panel panel-default">
+                <!--<div class="panel-heading">
+                  <h4 class="panel-title"><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-tabs" href="#product-tab-4">{{ settings.custom_size_chart_title }} <i class="fa fa-angle-right pull-right"></i></a></h4>
+                </div>-->
+                <div id="product-tab-4" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <img src="{{ 'custom_size_chart_content.jpg' | asset_url }}" alt="{{ settings.custom_size_chart_title }}" />
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+            {% endif %}
+            <!-- Start update -->
+            {% if settings.product_tab_style == '3' %}
+            <div class="product-collateral hidden-xs">
+              <ul class="nav nav-tabs">
+                {% if settings.display_product_detail_description %}
+                <li class="active"><a data-toggle="tab" href="#sectionA">{{ settings.product_description_title }}</a></li>
+                {% endif %}
+                {% if settings.display_product_reviews %}
+                <li><a data-toggle="tab" href="#sectionB">Reviews</a></li>
+                {% endif %}
+                {% if settings.display_custom_tab %}
+                <li><a data-toggle="tab" href="#sectionC">{{ settings.custom_tab_title }}</a></li>
+                {% endif %}
+                {% if settings.display_size_chart %}
+                <li><a data-toggle="tab" href="#sectionD">{{ settings.custom_size_chart_title }}</a></li>
+                {% endif %}
+              </ul>
+              <div class="tab-content">
+                {% if settings.display_product_detail_description %}
+                <div id="sectionA" class="tab-pane fade in active">
+                  <div class="std">
+                    {{ product.description }}
+                  </div>
+                </div>
+                {% endif %}
+                {% if settings.display_product_reviews %}
+                <div id="sectionB" class="tab-pane fade">
+                  <div id="customer-reviews">
+                    <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+                  </div>
+                </div>
+                {% endif %}
+                {% if settings.display_custom_tab %}
+                <div id="sectionC" class="tab-pane fade">
+                  <div class="box-collateral">
+                    {{ settings.custom_tab_content }}
+                  </div>
+                </div>
+                {% endif %}
+                {% if settings.display_size_chart %}
+                <div id="sectionD" class="tab-pane fade">
+                  <div class="box-collateral">
+                    <img src="{{ 'custom_size_chart_content.jpg' | asset_url }}" alt="{{ settings.custom_size_chart_title }}" />
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+
+                      
+<!-- Description and shipping tabs ends here -->
+                     
+                         <div class="short-description">
+                                                
+                        <div class="std">{{ product.description }}</div>
+                        {% if product.tags contains "pre-order" %}
+                        	<span>The estimated delivery for items pre-order is 2-3 weeks.</span>
+                        {%endif%}
+                      </div>
+                      
+                      
+                      
+                     
+                      {% assign hide_default_title = false %}
+                      {% if product.variants.size == 1 and product.variants.first.title contains 'Default' %}
+                      {% assign hide_default_title = true %}
+                      {% endif %}
+                      <div class="add-to-box">
+                        <form id="add-item-form" action="/cart/add" method="post" class="variants clearfix">
+                          <!-- Begin product options -->
+                          <div id="width-option" class="product-options-one {% if hide_default_title %}no-options {% endif %}">
+                           
+                       
+                          <main class="tab-panel">
+  
+  <input id="tab1" type="radio" name="tabs" checked>
+  <label for="tab1" class="tab-pn">Size</label>
+    
+  <input id="tab2" type="radio" name="tabs">
+  <label for="tab2" class="tab-pn">Share</label>
+ 
+    
+  <section id="content1">
+   	{%comment%}<div><a id="sizechart">Size Chart</a></div>{%endcomment%}
+                          
+                            {% for option in product.options %}
+                            {% include 'swatch' with option %}
+                            {% endfor %}
+    
+  </section>
+                           
+    
+  <section id="content2">
+                         <div class="novaworks-social-share">
+                        <ul>
+                          <li><a class="share_titles" onclick="return false;" href="#">SHARE:</a></li>
+                          <li class="facebook">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url }}{{ product.url }}" target="_blank" title="Share on Facebook">
+                              <i class="fa fa-facebook"></i>
+                            </a>
+                          </li>
+                          <li class="twitter">
+                            <a href="https://twitter.com/home?status={{ shop.url }}{{ product.url }}" target="_blank" title="Share on Twitter">
+                              <i class="fa fa-twitter"></i>
+                            </a>
+                          </li>
+                          <li class="pinterest">
+                            <a href="https://pinterest.com/pin/create/button/?url={{ shop.url }}{{ product.url }}&media={{ featured_image | img_url: '1024x1024' }}&description={{ product.title }}" target="_blank" title="Pin on Pinterest">
+                              <i class="fa fa-pinterest"></i>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+  </section>
+      
+</main>
+                           
+                            <div class="select clearfix"{% if hide_default_title %} style="display:none"{% endif %}>
+                              <select id="product-select" name="id" style="display:none;">
+                                {% for variant in product.variants %}
+                                <option value="{{ variant.id }}"{% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %}>{{ variant.title }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+
+                                                        
+                            
+                              <div class="add-to-qty">
+                              <div class="desc-qty button-qty"><span>-</span></div>
+                              <input type="text" name="quantity" id="quantity" maxlength="12" value="1" title="Qty" class="input-text qty" />
+                              <div class="inc-qty button-qty"><span>+</span></div>
+                            </div>
+                            
+                            
+                            
+                            <div class="purchase-section{% if product.variants.size > 1 %} multiple{% endif %}">
+                              <div class="purchase">
+                                {% if product.tags contains "pre-order" %}
+                                <div class="add-to-cart">
+                                  <button name="add" type="button" onclick="" title="Add to Cart" class="button btn-cart">
+                                    <span><span>PRE-ORDER</span></span>
+                                  </button>
+                                </div>
+                                {%else%}
+                                {% unless product.available %}
+                                <div class="add-to-cart">
+                                  <button name="add" disabled type="button" onclick="" title="{{ 'products.product.sold_out_html' | t }}" class="button btn-cart">
+                                    <span><span>{{ 'products.product.sold_out_html' | t }}</span></span>
+                                  </button>
+                                </div>
+                                {% else %}
+                                <div class="add-to-cart">
+                                  <button name="add" type="button" onclick="" title="Add to Cart" class="button btn-cart">
+                                    <span><span>Add to Bag</span></span>
+                                  </button>
+                                </div>
+                                {% endunless %}
+                                {%endif%}  
+                                
+                  
+                                
+                                
+                                
+                                
+                                
+  
+                                <div class="add-to-link">
+                                  <!-- Add to links-->
+                                  <ul class="add-to-links">
+                                    <li>
+                                       {% include 'wishlist-button' %}
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- End product options -->
+                        </form>{% if product.selected_or_first_available_variant.available %}{% else %}<button id='notify-me' class='btn' style='margin-top: 50px;width: 100%;'>Notify me when available</button>{% endif %}
+                                             <div id="width-option" class="product-options-one--notify">
+    
+    
+    <div class="purchase-section multiple-notify">
+                              <div class="purchase-notify">
+                                
+                                
+                                <div class="add-to-cart-notify">
+                                  
+
+<button id="notify-me" class="button">Notify me when available</button>
+                                </div>
+                                <div class="add-to-link">
+                                  <!-- Add to links-->
+                                  <ul class="add-to-links">
+                                    <li>
+                                       
+
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+</div>
+                        
+
+                        
+                                                      </div>
+  
+
+                  
+                      <div id="product-{{ product.id }}" class="right-next">
+                    <div id="product-header" class="desktop-12 mobile-3">
+                      {% if collection %} 
+                      <div class="pre-icon">
+                        {% if collection.previous_product %}
+                        {{ 'Previous /' | link_to: collection.previous_product }}
+                        {% endif %}
+                      </div>
+                      
+                      <div class="next-icon">
+                        {% if collection.next_product %}
+                        {{ 'Next' | link_to: collection.next_product }}
+                        {% endif %}
+                      </div> 
+
+                      {% endif %}
+                    </div>
+                  </div>
+                    </div>
+                  </div>
+               
+                </div>
+            </div>
+
+            <!-- tabs block moved from here -->
+            
+            <div class="panel-group visible-xs" id="product-tabs">
+             
+              {% if settings.display_product_reviews %}
+              <div class="panel panel-default">
+                <!--<div class="panel-heading">
+                  <h4 class="panel-title"><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-tabs" href="#product-tab-2">{{ settings.product_review_title }} <i class="fa fa-angle-right pull-right"></i></a></h4>
+                </div>-->
+                <div id="product-tab-2" class="panel-collapse collapse">
+                  <div class="panel-body"  id="customer-reviews-xs"></div>
+                </div>
+              </div>
+              {% endif %}
+              {% if settings.display_custom_tab %}
+              <div class="panel panel-default">
+                <!--<div class="panel-heading">
+                  <h4 class="panel-title"><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-tabs" href="#product-tab-3">{{ settings.custom_tab_title }} <i class="fa fa-angle-right pull-right"></i></a></h4>
+                </div>-->
+                <div id="product-tab-3" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    {{ settings.custom_tab_content }}
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+              {% if settings.display_size_chart %}
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-tabs" href="#product-tab-4">{{ settings.custom_size_chart_title }} <i class="fa fa-angle-right pull-right"></i></a></h4>
+                </div>
+                <div id="product-tab-4" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <img src="{{ 'custom_size_chart_content.jpg' | asset_url }}" alt="{{ settings.custom_size_chart_title }}" />
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+            {% endif %}
+            <!-- end update -->
+            
+            {% endif %}
+            {% if settings.show_related_products %}
+            <!-- End Related -->
+            {% include 'related-products' %}
+            <!-- End Related -->
+            {% endif %}
+          </div>
+            
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% include "size-chart" %}
+<div style="display:none" id="preloading">
+  {% for image in product.images offset: 1 %}
+  {{ image | product_img_url: 'master' | img_tag }}
+  {{ image | product_img_url: 'grande' | img_tag }}
+  {% endfor %}
+</div>
+
+  {{ 'script-min.js' | asset_url | script_tag }}
+
+
+
+
+
+<script>
+  var selectCallback = function(variant, selector) {
+    
+
+    
+    if (variant && variant.available) {
+    $('#BIS_trigger').hide(); // hide the button
+      } else {
+        $('#BIS_trigger').show().attr('data-variant-id', variant.id); // show the button and set the default variant
+      }
+    if (variant && variant.featured_image) {
+      var newImage = variant.featured_image; 
+      var mainImageDomEl = jQuery('#first-img img')[0]; 
+      Shopify.Image.switchImage(newImage, mainImageDomEl, switchImage); 
+    }
+   
+    /*jQuery(".alt_img_tag").each(function() {
+         //alert('hi');
+         var alt_tag = jQuery(this).attr('alt').replace("/","");
+          
+        	if (variant) {
+              //alert('hi');
+   				var string = variant.option2;
+            	var fvariant = string.replace(/["~!@#$%^&*\(\)_+=`{}\[\]\|\\:;'<>,.\/?"\- \t\r\n]+/g, '');
+             	var first_variant = fvariant.toUpperCase();
+              	var first_variant = first_variant.replace("/","");
+                           //alert(alt_tag);
+               if (first_variant == alt_tag) {      
+                 
+               	jQuery("."+alt_tag).css('display','inline-block');
+               }
+               else {                 
+               	jQuery("."+alt_tag).css('display','none');
+               }              
+            }
+            else {
+              jQuery("."+alt_tag).css('display','inline-block');
+            } 
+              
+       });*/
+  if (variant) {  
+	var color_var = variant.option2;
+    //alert(color_var);
+    jQuery('.product-codes .color-var').html(color_var);
+  }else{
+    jQuery('.product-codes .color-var').html("Black");
+  }
+    if (variant && variant.available) {
+
+      
+      jQuery('.btn-cart span').html('<span>Add to Bag</span>');
+      jQuery('.availability span').html('In stock');
+      jQuery('#notify-me').hide();
+      jQuery('.add-to-cart button').removeAttr('disabled').removeClass('disabled'); 
+      if(variant.price < variant.compare_at_price){
+        jQuery('.price-preview').html(Shopify.formatMoney(variant.price, "{{ shop.money_format }}").replace(".00", ""));
+        jQuery('.old-price .price').html(Shopify.formatMoney(variant.compare_at_price, "{{ shop.money_format }}").replace(".00", ""));
+      } else {
+        jQuery('.price-preview').html(Shopify.formatMoney(variant.price, "{{ shop.money_format }}").replace(".00", ""));
+      }
+    } else {
+                                                          
+                               
+                                      
+                                      
+                                      
+      jQuery('.btn-cart span').html('<span>Sold Out</span>');
+      jQuery('.add-to-cart button').addClass('disabled').attr('disabled', 'disabled');
+      var message = variant ? {{ 'products.product.sold_out_html' | t | json }} : {{ 'products.product.unavailable_html' | t | json }};
+      jQuery('.availability span').html(message);
+                                      jQuery('#notify-me').show();
+        var text1 = variant.id;
+$("#product-selectffff option").filter(function() {
+    return this.value == text1; 
+}).attr('selected', true); 
+        
+    }
+    // BEGIN SWATCHES
+    if (variant) {
+      var form = jQuery('#' + selector.domIdPrefix).closest('form');
+      for (var i=0,length=variant.options.length; i<length; i++) {
+        var radioButton = form.find('.swatch[data-option-index="' + i + '"] :radio[value="' + variant.options[i] +'"]');
+        if (radioButton.size()) {
+          radioButton.get(0).checked = true;
+        }
+      }
+    }
+    // END SWATCHES
+  };
+
+  jQuery(document).ready(function($){
+    new Shopify.OptionSelectors("product-select", { product: {{ product | json }}, onVariantSelected: selectCallback, enableHistoryState: true });
+    {% if product.options.size == 1 and product.options.first != 'Title' %}
+    $('.selector-wrapper:eq(0)').prepend('<label>{{ product.options.first | escape }}</label>');
+    {% endif %}
+    jQuery('.swatch :radio').change(function() {
+      var optionIndex = jQuery(this).closest('.swatch').attr('data-option-index');
+      var optionValue = jQuery(this).val();
+      jQuery(this).closest('form').find('.single-option-selector').eq(optionIndex).val(optionValue).trigger('change');
+    }); 
+  });
+</script>
+
+
+<!-- <script>
+  jQuery(document).ready(function(){
+  	if(jQuery(window).width()>767) {
+    	jQuery('#first-img').zoom();
+    }
+  });
+</script> -->
+
+{{ 'jquery.zoom.js' | asset_url | script_tag }}
+
+<script type="text/javascript">    
+  
+ /*   jQuery(window).load(function() {    
+       
+      
+       jQuery('#flexslider').flexslider({
+          animation: "slide"		
+    	});  
+      
+      
+    });
+*/
+</script>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+      $("a.change_image").click(function() {        
+        var imgsrc = $(this).find('img').attr('src').replace('_small', '');
+        $('.float_imgs_aa img').attr('src', imgsrc); 
+        jQuery('#first-img').zoom();
+      });
+    });      
+</script>
+<script>
+
+/*$(window).load(function() {
+  $('.flexslider').flexslider({
+    animation: "slider",
+    start: function(slider){
+          $('body').removeClass('loading');
+        }
+  });
+});
+// jQuery(window).on("load resize", function () {
+//    width = $(window).width();
+//   console.log(width);
+//   if(width < 769)
+//   {
+
+//     $('.flexslider').flexslider({
+//     animation: "fade",
+//       start: function(slider){
+//           $('body').removeClass('loading');
+//         }
+//   });
+//   }
+// });*/
+</script>
+<script>
+   $(window).resize(function() {
+   width = $(window).width();
+     if(width < 767){
+       $('.bhainskidumha-mobile').flexslider({
+        animation: "slide",
+        controlNav: false,
+        nextText: '<i class="fa fa-angle-right" aria-hidden="true"></i>',
+        prevText: '<i class="fa fa-angle-left" aria-hidden="true"></i>'
+        });
+     }
+     });
+ 
+  if($(window).width() < 767){
+      
+    $(window).load(function() {
+      $('.bhainskidumha-mobile').flexslider({
+        animation: "slide",
+        controlNav: false,
+        nextText: '<i class="fa fa-angle-right" aria-hidden="true"></i>',
+        prevText: '<i class="fa fa-angle-left" aria-hidden="true"></i>'
+      });
+    });
+
+  }
+</script>
+<style>
+
+.flex-direction-nav {
+  display: block;
+  float: left;
+  width: 100%;
+}
+.prev {
+  float: left;
+  font-size: 20px;
+}
+.next {
+  float: right;
+  font-size: 20px;
+}
+/* .selector-wrapper {
+  display: none !important;
+} */
+.selector-wrapper > label{
+  display:none;
+}
+</style>
+
+<script>
+  $("#sizechart").click(function(){ 
+    $('#size-chart-popup').bPopup();
+    });
+</script>
+
+<style>
+
+main {
+min-width: 0;
+    max-width: 100%;
+    /* padding: 58px; */
+    margin: 0 auto;
+    background: #fff;
+      text-align: center;
+}
+
+section {
+  display: none;
+  padding: 20px 0 0;
+ 
+}
+
+input#tab1 {
+    opacity: 0;
+}
+input#tab2 {
+    opacity: 0;
+}
+
+label.tab-pn {
+display: inline-block;
+    margin: 0 0 -1px;
+    padding: 15px 0;
+    text-align: center;
+    border: 1px solid transparent;
+    float: none;
+    width: auto;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    min-width: 30%;
+}
+  section#content1 {
+    float: left;
+    width: 100%;
+    text-align: center;
+}
+
+label:before {
+  margin-right: 10px;
+}
+
+
+input:checked + label {
+  color: #555;
+/*   border: 1px solid #ddd; */
+/*   border-top: 2px solid orange; */
+  border-bottom: 1px solid #000;
+}
+
+#tab1:checked ~ #content1,
+#tab2:checked ~ #content2,
+#tab3:checked ~ #content3,
+#tab4:checked ~ #content4 {
+  display: block;
+}
+
+@media screen and (max-width: 650px) {
+  label {
+    font-size: 0;
+  }
+  label:before {
+    margin: 0;
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  label {
+    padding: 15px;
+  }
+} 
+</style> 
+<script>
+  var selectIds = $('#panel1,#panel2,#panel3');
+$(function ($) {
+    selectIds.on('show.bs.collapse hidden.bs.collapse', function () {
+        $(this).prev().find('.fa').toggleClass('fa-plus fa-minus');
+    })
+});
+</script> 
